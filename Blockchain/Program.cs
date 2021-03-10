@@ -6,7 +6,7 @@ namespace Blockchain
     {
         static void Main(string[] args)
         {
-            Chain chain = new Chain(genesisBlockData: "Hello from Ukraine");
+            Chain chain = new Chain();
             while (true)
             {
                 Console.WriteLine(

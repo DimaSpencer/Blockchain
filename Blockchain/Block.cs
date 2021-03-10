@@ -8,13 +8,13 @@ namespace Blockchain
 {
     public class Block : IBlock
     {
-        public static long _idGenerator = 1;
-        public long Id { get; }
-        public string Data { get; }
-        public string Hash { get; }
-        public string PreviousHash { get; }
-        public DateTime TimeOfCreation { get; }
-
+        public static int _idGenerator = 1;
+        public int Id { get; private set; }
+        public string Data { get; private set; }
+        public string Hash { get; private set; }
+        public string PreviousHash { get; private set; }
+        public DateTime TimeOfCreation { get; private set; }
+        public Block() { }
         public Block(string data, string previousHash)
         {
             #region CheckInputData

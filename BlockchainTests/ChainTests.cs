@@ -14,7 +14,7 @@ namespace Blockchain.Tests
         {
             string data = "Hello world";
 
-            Chain chain = new Chain(genesisBlockData: data);
+            Chain chain = new Chain();
             chain.CreateBlock(data);
 
             int blocksCount = chain.Blocks.Count;
@@ -25,9 +25,7 @@ namespace Blockchain.Tests
         [TestMethod()]
         public void CheckChainTest()
         {
-            string data = "Hello world";
-
-            Chain chain = new Chain(genesisBlockData: data);
+            Chain chain = new Chain();
             chain.CreateBlock("Any data 1");
             chain.CreateBlock("Any data 2");
             Assert.IsTrue(chain.CheckChain());

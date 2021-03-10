@@ -9,23 +9,31 @@ namespace Blockchain
     {
         public List<Block> Blocks { get; }
         public Block GenesisBlock { get; }
-        public Chain(string genesisBlockData)
+        //у нас должна быть возможность подключения к уже имеющийся цепи блоков
+        public Chain()
         {
-            //create genesis block
-            Blocks = new List<Block>();
-            GenesisBlock = new Block(genesisBlockData, "5db1fee4b5703808c48078a76768b155b421b210c0761cd6a5d223f4d99f1eaa");
-            Blocks.Add(GenesisBlock);
+            var blocksFromDatabase = LoadChainFromDatabase();
+
+            if (blocksFromDatabase.Count > 0)
+            {
+                Blocks = blocksFromDatabase;
+            }
+            else
+            {
+                //create genesis block
+                Blocks = new List<Block>();
+                GenesisBlock = new Block("Hello from Ukraine", previousHash: "null");
+                Blocks.Add(GenesisBlock);
+                SaveBlockToDatabase(GenesisBlock);
+            }
         }
         public void CreateBlock(string data)
         {
             string lastHash = Blocks[^1].Hash;
             Block block = new Block(data, lastHash);
             Blocks.Add(block);
+            SaveBlockToDatabase(block);
         }
-        /// <summary>
-        /// Метод проверки корректности цепочки.
-        /// </summary>
-        /// <returns></returns>
         public bool CheckChain()
         {
             string previousHash = Blocks[0].Hash;
@@ -39,6 +47,19 @@ namespace Blockchain
                 previousHash = block.Hash;
             }
             return true;
+        }
+        private void SaveBlockToDatabase(Block block)
+        {
+            using var database = new BlockchainDatabaseContext();
+            database.Blocks.Add(block);
+            database.SaveChanges();
+        }
+        private List<Block> LoadChainFromDatabase()
+        {
+            using var database = new BlockchainDatabaseContext();
+            var resultBlocks = new List<Block>();
+            resultBlocks.AddRange(database.Blocks);
+            return resultBlocks;
         }
     }
 }
