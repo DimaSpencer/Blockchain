@@ -8,7 +8,6 @@ namespace Blockchain
 {
     public class Block : IBlock
     {
-        public static int _idGenerator = 1;
         public int Id { get; private set; }
         public string Data { get; private set; }
         public string Hash { get; private set; }
@@ -23,7 +22,6 @@ namespace Blockchain
             if (string.IsNullOrEmpty(previousHash))
                 throw new ArgumentException("Невалидное значение PreviousHash", nameof(previousHash));
             #endregion
-            Id = _idGenerator++;
             Data = data;
             Hash = GenerateHash(data, previousHash);
             PreviousHash = previousHash;
